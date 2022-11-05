@@ -21,9 +21,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Checkbox
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composetutorialkt.ui.theme.ComposeTutorialKtTheme
+
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.foundation.*
+
+import androidx.compose.ui.text.input.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,17 +41,31 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
 //                    color = MaterialTheme.colorScheme.background
                 ) {
-                    MessageCard(Message("나다", "너다"))
+                    MessageCard(Message("드가자", "출발하자"))
                 }
             }
         }
     }
 }
-data class Message(val author:String, val body:String)
+
+data class Message(val author: String, val body: String)
 
 @Composable
 fun MessageCard(msg: Message) {
     Row(modifier = Modifier.padding(all = 8.dp)) {
+
+        val flag = remember { mutableStateOf(false) }
+        IconToggleButton(
+            checked = flag.value,
+            onCheckedChange = {
+                flag.value = !flag.value
+            },
+            modifier = Modifier.padding(10.dp)
+
+        ){
+
+        }
+
         Image(
             painter = painterResource(R.drawable.ic_launcher_background),
             contentDescription = "Contact profile picture",
@@ -57,19 +77,20 @@ fun MessageCard(msg: Message) {
                 .border(2.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
         )
 
-// Add a horizontal space between the image and the column
+        // Add a horizontal space between the image and the column
         Spacer(modifier = Modifier.width(8.dp))
 
-        var isExpanded by remember { mutableStateOf(false)}
+
+        var isExpanded by remember { mutableStateOf(false) }
         //remember 를 사용하여 메모리에 로컬 상태를 저장
         //mutableStateOf 에 전달된 값의 변경사항을 추적할 수 있습니다. 이 상태를 사용하는 컴포저블
         // 및 하위 요소는 값이 없데이트되면 자동으로 다시 그려집니다.
 
         val surfaceColor by animateColorAsState(
-            if(isExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+            if (isExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
         )
 
-        Column (modifier = Modifier.clickable { isExpanded =! isExpanded }){
+        Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
             Text(
                 text = msg.author,
                 color = MaterialTheme.colorScheme.primary,
@@ -88,7 +109,7 @@ fun MessageCard(msg: Message) {
             ) {
                 Text(
                     text = msg.body,
-                    modifier = Modifier.padding(all=4.dp),
+                    modifier = Modifier.padding(all = 4.dp),
                     maxLines = if (isExpanded) Int.MAX_VALUE else 1,
 //                    color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.bodyMedium
@@ -100,10 +121,11 @@ fun MessageCard(msg: Message) {
     }
 
 }
+
 @Composable
-fun Conversation(messages: List<Message>){
-    LazyColumn{
-        items(messages){message ->
+fun Conversation(messages: List<Message>) {
+    LazyColumn {
+        items(messages) { message ->
             MessageCard(message)
         }
     }
