@@ -41,7 +41,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
 //                    color = MaterialTheme.colorScheme.background
                 ) {
-                    MessageCard(Message("드가자", "출발하자"))
+//                    MessageCard(Message("드가자", "출발하자"))
+                    Conversation(messages = SampleData.conversationSample)
                 }
             }
         }
